@@ -30,7 +30,7 @@ async def _settings_schema(hass: HomeAssistant, current: dict) -> vol.Schema:
     if colors:
         fields[vol.Optional(CONF_COLOR, description={"suggested_value": current.get(CONF_COLOR)})] = \
             sel.SelectSelector(sel.SelectSelectorConfig(
-                options=[sel.SelectOptionDict(value=c, label=c.replace("-", " ").replace("_", " ").capitalize())
+                options=[sel.SelectOptionDict(value=c, label=" ".join(w.capitalize() for w in c.replace("_", "-").split("-")))
                          for c in colors],
                 mode=sel.SelectSelectorMode.DROPDOWN))
     services = _notify_services(hass)

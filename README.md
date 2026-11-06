@@ -27,7 +27,7 @@ by month numbers.
   and a table of the month's charges (day, time, kWh, price per kWh, total).
 - **Monthly charts** of kWh (AC and DC) and cost, from the diary, so imported charges show up too.
 - **Import** your old charges from a spreadsheet (CSV), and **export** the diary.
-- **Your car's picture** in the color you choose.
+- **Your car's picture** in its color: Branco Storm, Cinza Ash, Prata Moon or Preto Carbon.
 - English and Portuguese (Brazil).
 
 ## Requirements

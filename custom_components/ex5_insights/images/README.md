@@ -3,7 +3,8 @@
 One file per color. The file name is the color name shown in the settings.
 Um arquivo por cor. O nome do arquivo é o nome da cor que aparece nos ajustes.
 
-Example / Exemplo: `azul-celeste.png`, `branco-perola.png`, `cinza-grafite.webp`.
+Included / Incluídas: `branco-storm.png`, `cinza-ash.png`, `prata-moon.png`, `preto-carbon.png` (1000 px wide,
+transparent background / 1000 px de largura, fundo transparente). New colors / Cores novas: `nome-da-cor.png`.
 
 PNG, JPG, WEBP or SVG. Transparent background, about 1200 × 600 px.
 Fundo transparente, cerca de 1200 × 600 px.

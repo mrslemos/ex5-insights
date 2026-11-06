@@ -26,7 +26,7 @@ números de cada mês.
   uma tabela com as recargas do mês (dia, hora, kWh, R$/kWh, total).
 - **Gráficos por mês** de kWh (AC e DC) e de custo, a partir do diário, então as recargas importadas também entram.
 - **Importar** recargas antigas de uma planilha (CSV) e **exportar** o diário.
-- **A foto do seu carro** na cor que você escolher.
+- **A foto do seu carro** na cor dele: Branco Storm, Cinza Ash, Prata Moon ou Preto Carbon.
 - Português (Brasil) e inglês.
 
 ## Requisitos
