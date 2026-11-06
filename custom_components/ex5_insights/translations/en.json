@@ -1,0 +1,287 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add your EX5",
+        "description": "Choose the car found by Geely Connect. Charging places are added later, in Configure.",
+        "data": {
+          "device_id": "Car",
+          "color": "Car color",
+          "notify_service": "Phone for notifications",
+          "capacity": "Usable battery capacity",
+          "end_minutes": "A charge ends after"
+        },
+        "data_description": {
+          "color": "Picture shown on the dashboard.",
+          "notify_service": "Charge finished, with fields to enter the amount paid (text fields work on iPhone; on Android use the dashboard). Leave empty for no notifications.",
+          "capacity": "Used when the car does not report the charging power: battery rise × capacity. 60.22 kWh is the published value.",
+          "end_minutes": "Minutes without power and with the charger stopped."
+        }
+      }
+    },
+    "error": {
+      "entities_missing": "This device is missing Geely Connect sensors (battery, charging power, charger, odometer, location). Check that they are enabled."
+    },
+    "abort": {
+      "no_car": "No Geely Connect car found. Install and set up Geely Connect first.",
+      "already_configured": "This car is already set up."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "EX5 Insights",
+        "menu_options": {
+          "settings": "Settings (color, phone, battery)",
+          "add_place": "Add a charging place",
+          "edit_place": "Edit a charging place",
+          "remove_place": "Remove charging places"
+        }
+      },
+      "settings": {
+        "title": "Settings",
+        "data": {
+          "color": "Car color",
+          "notify_service": "Phone for notifications",
+          "capacity": "Usable battery capacity",
+          "end_minutes": "A charge ends after"
+        },
+        "data_description": {
+          "color": "Picture shown on the dashboard.",
+          "notify_service": "Charge finished, with fields to enter the amount paid (text fields work on iPhone; on Android use the dashboard). Leave empty for no notifications.",
+          "capacity": "Used when the car does not report the charging power: battery rise × capacity. 60.22 kWh is the published value.",
+          "end_minutes": "Minutes without power and with the charger stopped."
+        }
+      },
+      "add_place": {
+        "title": "New charging place",
+        "description": "Charges elsewhere ask the amount paid.",
+        "data": {
+          "name": "Name",
+          "location": "Location and radius",
+          "rule": "AC charges here",
+          "tariff": "AC price per kWh (if fixed)",
+          "dc_rule": "DC charges here",
+          "dc_tariff": "DC price per kWh (if fixed)"
+        },
+        "data_description": {
+          "name": "How it appears in the diary, e.g. Home, Office, Parents' house.",
+          "location": "Drag the pin to where the car parks to charge and set the radius (300 m works for most houses).",
+          "rule": "Free (solar, someone else pays), fixed price per kWh, or ask the amount paid after each charge.",
+          "tariff": "E.g. the grid fee you still pay with solar."
+        }
+      },
+      "edit_place": {
+        "title": "Edit charging place",
+        "data": {
+          "place": "Place"
+        }
+      },
+      "place_form": {
+        "title": "Edit charging place",
+        "data": {
+          "name": "Name",
+          "location": "Location and radius",
+          "rule": "AC charges here",
+          "tariff": "AC price per kWh (if fixed)",
+          "dc_rule": "DC charges here",
+          "dc_tariff": "DC price per kWh (if fixed)"
+        },
+        "data_description": {
+          "name": "How it appears in the diary, e.g. Home, Office, Parents' house.",
+          "location": "Drag the pin to where the car parks to charge and set the radius (300 m works for most houses).",
+          "rule": "Free (solar, someone else pays), fixed price per kWh, or ask the amount paid after each charge.",
+          "tariff": "E.g. the grid fee you still pay with solar."
+        }
+      },
+      "remove_place": {
+        "title": "Remove charging places",
+        "data": {
+          "places": "Places to remove"
+        }
+      }
+    }
+  },
+  "selector": {
+    "rule": {
+      "options": {
+        "free": "Free",
+        "fixed": "Fixed price per kWh",
+        "ask": "Ask the amount paid"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "month_distance": {
+        "name": "Distance in the month"
+      },
+      "month_charges": {
+        "name": "Charges in the month"
+      },
+      "month_energy": {
+        "name": "kWh in the month"
+      },
+      "month_cost": {
+        "name": "Cost in the month"
+      },
+      "month_consumption": {
+        "name": "Consumption in the month"
+      },
+      "month_cost_per_km": {
+        "name": "Cost per km in the month"
+      },
+      "month_table": {
+        "name": "Charges of the month"
+      },
+      "last_charge": {
+        "name": "Last charge"
+      },
+      "session_energy": {
+        "name": "Energy of this charge"
+      }
+    },
+    "binary_sensor": {
+      "charging": {
+        "name": "Charging"
+      }
+    },
+    "select": {
+      "month": {
+        "name": "Month"
+      }
+    },
+    "number": {
+      "pending_cost": {
+        "name": "Amount paid (pending charge)"
+      },
+      "pending_station_kwh": {
+        "name": "Station kWh (pending charge)"
+      }
+    },
+    "image": {
+      "car": {
+        "name": "Car"
+      }
+    }
+  },
+  "exceptions": {
+    "no_entry": {
+      "message": "EX5 Insights is not set up or not loaded."
+    },
+    "many_entries": {
+      "message": "More than one car: give config_entry_id."
+    },
+    "bad_path": {
+      "message": "The file must be inside the configuration folder."
+    },
+    "bad_file": {
+      "message": "Could not read the file: {error}"
+    },
+    "no_charge": {
+      "message": "No matching charge."
+    }
+  },
+  "services": {
+    "set_charge_cost": {
+      "name": "Set charge cost",
+      "description": "Amount paid for a charge.",
+      "fields": {
+        "cost": {
+          "name": "Cost",
+          "description": "Amount paid."
+        },
+        "charge_id": {
+          "name": "Charge id",
+          "description": "Empty = the latest one waiting for it."
+        },
+        "config_entry_id": {
+          "name": "Car (config entry)",
+          "description": "Only needed with more than one car."
+        }
+      }
+    },
+    "set_charge_energy": {
+      "name": "Set station kWh",
+      "description": "The station's kWh become the charge's official energy.",
+      "fields": {
+        "kwh": {
+          "name": "kWh",
+          "description": "kWh charged by the station."
+        },
+        "charge_id": {
+          "name": "Charge id",
+          "description": "Empty = the latest one waiting for it."
+        },
+        "config_entry_id": {
+          "name": "Car (config entry)",
+          "description": "Only needed with more than one car."
+        }
+      }
+    },
+    "set_month_distance": {
+      "name": "Set month distance",
+      "description": "km driven in a month without odometer data (e.g. before installing). Empty km removes it.",
+      "fields": {
+        "month": {
+          "name": "Month",
+          "description": "YYYY-MM"
+        },
+        "km": {
+          "name": "km",
+          "description": "Distance."
+        },
+        "config_entry_id": {
+          "name": "Car (config entry)",
+          "description": "Only needed with more than one car."
+        }
+      }
+    },
+    "delete_charge": {
+      "name": "Delete charge",
+      "description": "Hides a charge (restore brings it back).",
+      "fields": {
+        "charge_id": {
+          "name": "Charge id",
+          "description": "See the table's rows."
+        },
+        "restore": {
+          "name": "Restore",
+          "description": "Bring a deleted charge back."
+        },
+        "config_entry_id": {
+          "name": "Car (config entry)",
+          "description": "Only needed with more than one car."
+        }
+      }
+    },
+    "import_charges": {
+      "name": "Import charges",
+      "description": "Adds charges from a CSV in the configuration folder (date and kWh required; time, type, place, cost, minutes, odometer, power optional). Same day and kWh are skipped.",
+      "fields": {
+        "file": {
+          "name": "File",
+          "description": "Path inside the configuration folder, e.g. charges.csv"
+        },
+        "config_entry_id": {
+          "name": "Car (config entry)",
+          "description": "Only needed with more than one car."
+        }
+      }
+    },
+    "export_charges": {
+      "name": "Export charges",
+      "description": "Writes the diary as CSV in the configuration folder.",
+      "fields": {
+        "file": {
+          "name": "File",
+          "description": "Default: ex5_insights_charges.csv"
+        },
+        "config_entry_id": {
+          "name": "Car (config entry)",
+          "description": "Only needed with more than one car."
+        }
+      }
+    }
+  }
+}

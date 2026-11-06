@@ -1,0 +1,287 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Adicionar o seu EX5",
+        "description": "Escolha o carro encontrado pela Geely Connect. Os locais de recarga são adicionados depois, em Configurar.",
+        "data": {
+          "device_id": "Carro",
+          "color": "Cor do carro",
+          "notify_service": "Celular para os avisos",
+          "capacity": "Capacidade útil da bateria",
+          "end_minutes": "A recarga termina depois de"
+        },
+        "data_description": {
+          "color": "Imagem mostrada no painel.",
+          "notify_service": "Recarga concluída, com campos para informar o valor pago (o campo de texto funciona no iPhone; no Android, use o painel). Deixe vazio para não receber avisos.",
+          "capacity": "Usada quando o carro não informa a potência: subida da bateria × capacidade. 60,22 kWh é o valor de fábrica.",
+          "end_minutes": "Minutos sem potência e com o carregador parado."
+        }
+      }
+    },
+    "error": {
+      "entities_missing": "Faltam sensores da Geely Connect neste aparelho (bateria, potência de carga, carregador, odômetro, localização). Confira se estão ativados."
+    },
+    "abort": {
+      "no_car": "Nenhum carro da Geely Connect encontrado. Instale e configure a Geely Connect primeiro.",
+      "already_configured": "Este carro já está configurado."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "EX5 Insights",
+        "menu_options": {
+          "settings": "Ajustes (cor, celular, bateria)",
+          "add_place": "Adicionar local de recarga",
+          "edit_place": "Editar local de recarga",
+          "remove_place": "Remover locais de recarga"
+        }
+      },
+      "settings": {
+        "title": "Ajustes",
+        "data": {
+          "color": "Cor do carro",
+          "notify_service": "Celular para os avisos",
+          "capacity": "Capacidade útil da bateria",
+          "end_minutes": "A recarga termina depois de"
+        },
+        "data_description": {
+          "color": "Imagem mostrada no painel.",
+          "notify_service": "Recarga concluída, com campos para informar o valor pago (o campo de texto funciona no iPhone; no Android, use o painel). Deixe vazio para não receber avisos.",
+          "capacity": "Usada quando o carro não informa a potência: subida da bateria × capacidade. 60,22 kWh é o valor de fábrica.",
+          "end_minutes": "Minutos sem potência e com o carregador parado."
+        }
+      },
+      "add_place": {
+        "title": "Novo local de recarga",
+        "description": "Recargas em outros lugares perguntam o valor pago.",
+        "data": {
+          "name": "Nome",
+          "location": "Local e raio",
+          "rule": "Recargas AC aqui",
+          "tariff": "Preço do kWh AC (se fixo)",
+          "dc_rule": "Recargas DC aqui",
+          "dc_tariff": "Preço do kWh DC (se fixo)"
+        },
+        "data_description": {
+          "name": "Como aparece no diário, ex.: Casa, Trabalho, Casa dos pais.",
+          "location": "Arraste o marcador para onde o carro estaciona para carregar e ajuste o raio (300 m serve para a maioria das casas).",
+          "rule": "Grátis (solar, outra pessoa paga), preço fixo por kWh, ou perguntar o valor pago depois de cada recarga.",
+          "tariff": "Ex.: o fio B que ainda se paga com energia solar."
+        }
+      },
+      "edit_place": {
+        "title": "Editar local de recarga",
+        "data": {
+          "place": "Local"
+        }
+      },
+      "place_form": {
+        "title": "Editar local de recarga",
+        "data": {
+          "name": "Nome",
+          "location": "Local e raio",
+          "rule": "Recargas AC aqui",
+          "tariff": "Preço do kWh AC (se fixo)",
+          "dc_rule": "Recargas DC aqui",
+          "dc_tariff": "Preço do kWh DC (se fixo)"
+        },
+        "data_description": {
+          "name": "Como aparece no diário, ex.: Casa, Trabalho, Casa dos pais.",
+          "location": "Arraste o marcador para onde o carro estaciona para carregar e ajuste o raio (300 m serve para a maioria das casas).",
+          "rule": "Grátis (solar, outra pessoa paga), preço fixo por kWh, ou perguntar o valor pago depois de cada recarga.",
+          "tariff": "Ex.: o fio B que ainda se paga com energia solar."
+        }
+      },
+      "remove_place": {
+        "title": "Remover locais de recarga",
+        "data": {
+          "places": "Locais a remover"
+        }
+      }
+    }
+  },
+  "selector": {
+    "rule": {
+      "options": {
+        "free": "Grátis",
+        "fixed": "Preço fixo por kWh",
+        "ask": "Perguntar o valor pago"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "month_distance": {
+        "name": "Km no mês"
+      },
+      "month_charges": {
+        "name": "Recargas no mês"
+      },
+      "month_energy": {
+        "name": "kWh no mês"
+      },
+      "month_cost": {
+        "name": "Custo no mês"
+      },
+      "month_consumption": {
+        "name": "Consumo no mês"
+      },
+      "month_cost_per_km": {
+        "name": "Custo por km no mês"
+      },
+      "month_table": {
+        "name": "Recargas do mês"
+      },
+      "last_charge": {
+        "name": "Última recarga"
+      },
+      "session_energy": {
+        "name": "Energia desta recarga"
+      }
+    },
+    "binary_sensor": {
+      "charging": {
+        "name": "Carregando"
+      }
+    },
+    "select": {
+      "month": {
+        "name": "Mês"
+      }
+    },
+    "number": {
+      "pending_cost": {
+        "name": "Valor pago (recarga pendente)"
+      },
+      "pending_station_kwh": {
+        "name": "kWh do eletroposto (recarga pendente)"
+      }
+    },
+    "image": {
+      "car": {
+        "name": "Carro"
+      }
+    }
+  },
+  "exceptions": {
+    "no_entry": {
+      "message": "O EX5 Insights não está configurado ou não carregou."
+    },
+    "many_entries": {
+      "message": "Mais de um carro: informe config_entry_id."
+    },
+    "bad_path": {
+      "message": "O arquivo precisa estar dentro da pasta de configuração."
+    },
+    "bad_file": {
+      "message": "Não foi possível ler o arquivo: {error}"
+    },
+    "no_charge": {
+      "message": "Nenhuma recarga correspondente."
+    }
+  },
+  "services": {
+    "set_charge_cost": {
+      "name": "Informar custo da recarga",
+      "description": "Valor pago numa recarga.",
+      "fields": {
+        "cost": {
+          "name": "Custo",
+          "description": "Valor pago."
+        },
+        "charge_id": {
+          "name": "Id da recarga",
+          "description": "Vazio = a mais recente que está esperando."
+        },
+        "config_entry_id": {
+          "name": "Carro (entrada de configuração)",
+          "description": "Só é preciso com mais de um carro."
+        }
+      }
+    },
+    "set_charge_energy": {
+      "name": "Informar kWh do eletroposto",
+      "description": "Os kWh do eletroposto viram a energia oficial da recarga.",
+      "fields": {
+        "kwh": {
+          "name": "kWh",
+          "description": "kWh cobrados pelo eletroposto."
+        },
+        "charge_id": {
+          "name": "Id da recarga",
+          "description": "Vazio = a mais recente que está esperando."
+        },
+        "config_entry_id": {
+          "name": "Carro (entrada de configuração)",
+          "description": "Só é preciso com mais de um carro."
+        }
+      }
+    },
+    "set_month_distance": {
+      "name": "Informar km do mês",
+      "description": "Km rodados num mês sem dados do odômetro (ex.: antes da instalação). Km vazio remove.",
+      "fields": {
+        "month": {
+          "name": "Mês",
+          "description": "YYYY-MM"
+        },
+        "km": {
+          "name": "km",
+          "description": "Distância."
+        },
+        "config_entry_id": {
+          "name": "Carro (entrada de configuração)",
+          "description": "Só é preciso com mais de um carro."
+        }
+      }
+    },
+    "delete_charge": {
+      "name": "Apagar recarga",
+      "description": "Esconde uma recarga (restaurar traz de volta).",
+      "fields": {
+        "charge_id": {
+          "name": "Id da recarga",
+          "description": "Veja as linhas da tabela."
+        },
+        "restore": {
+          "name": "Restaurar",
+          "description": "Traz de volta uma recarga apagada."
+        },
+        "config_entry_id": {
+          "name": "Carro (entrada de configuração)",
+          "description": "Só é preciso com mais de um carro."
+        }
+      }
+    },
+    "import_charges": {
+      "name": "Importar recargas",
+      "description": "Acrescenta recargas de um CSV na pasta de configuração (data e kWh obrigatórios; hora, tipo, local, custo, minutos, odômetro e potência opcionais). Mesmo dia e mesmos kWh são pulados.",
+      "fields": {
+        "file": {
+          "name": "Arquivo",
+          "description": "Caminho dentro da pasta de configuração, ex.: recargas.csv"
+        },
+        "config_entry_id": {
+          "name": "Carro (entrada de configuração)",
+          "description": "Só é preciso com mais de um carro."
+        }
+      }
+    },
+    "export_charges": {
+      "name": "Exportar recargas",
+      "description": "Grava o diário em CSV na pasta de configuração.",
+      "fields": {
+        "file": {
+          "name": "Arquivo",
+          "description": "Padrão: ex5_insights_charges.csv"
+        },
+        "config_entry_id": {
+          "name": "Carro (entrada de configuração)",
+          "description": "Só é preciso com mais de um carro."
+        }
+      }
+    }
+  }
+}

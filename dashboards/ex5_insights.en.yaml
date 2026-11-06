@@ -1,0 +1,153 @@
+# EX5 Insights dashboard. Copy everything and paste it in Settings > Dashboards > (new dashboard) > ⋮ > Raw configuration editor.
+title: EX5
+views:
+  - type: sections
+    title: Usage
+    path: usage
+    icon: "mdi:chart-box-outline"
+    max_columns: 2
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Month
+            icon: "mdi:calendar-month"
+          - type: tile
+            entity: select.ex5_month
+            name: Month
+            icon: "mdi:calendar-month"
+            color: blue
+            hide_state: true
+            vertical: false
+            features_position: inline
+            features:
+              - type: select-options
+            grid_options:
+              columns: full
+          - type: tile
+            entity: sensor.ex5_month_distance
+            name: Km
+            icon: "mdi:map-marker-distance"
+            color: blue
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_month_charges
+            name: Charges
+            icon: "mdi:ev-station"
+            color: green
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_month_energy
+            name: kWh
+            icon: "mdi:lightning-bolt"
+            color: amber
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_month_cost
+            name: Cost
+            icon: "mdi:cash"
+            color: red
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_month_consumption
+            name: Consumption
+            icon: "mdi:speedometer"
+            color: purple
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_month_cost_per_km
+            name: Cost per km
+            icon: "mdi:cash-marker"
+            color: grey
+            grid_options:
+              columns: 6
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: number.ex5_pending_cost
+                state_not: unavailable
+            card:
+              type: entities
+              title: Charge waiting for the amount paid
+              entities:
+                - entity: number.ex5_pending_cost
+                  name: Amount paid
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: number.ex5_pending_station_kwh
+                state_not: unavailable
+            card:
+              type: entities
+              title: "Charge waiting for the station's kWh"
+              entities:
+                - entity: number.ex5_pending_station_kwh
+                  name: Station kWh
+          - type: heading
+            heading: Charges of the month
+            icon: "mdi:ev-station"
+          - type: markdown
+            grid_options:
+              columns: full
+            content: "{% set e = 'sensor.ex5_month_table' %}{% set rs = state_attr(e, 'rows') or [] %}{% set t = state_attr(e, 'total') or {} %}{% if rs | count == 0 %}No charges in {{ state_attr(e, 'month_label') }}.{% else %}\n<table width=\"100%\">\n<tr><th align=\"left\">Day</th><th align=\"left\">Time</th><th align=\"right\">kWh</th><th align=\"right\">Price/kWh</th><th align=\"right\">Total</th></tr>\n{% for x in rs %}<tr><td>{{ x.day }}</td><td>{{ x.time or '—' }}</td><td align=\"right\">{{ x.kwh }}</td><td align=\"right\">{{ 'pending' if x.pending else ('—' if x.free else x.price) }}</td><td align=\"right\">{{ 'pending' if x.pending else ('free' if x.free else x.total) }}</td></tr>\n{% endfor %}<tr><td colspan=\"2\"><b>Total</b></td><td align=\"right\"><b>{{ t.kwh }}</b></td><td align=\"right\"><b>{{ t.price or '—' }}</b></td><td align=\"right\"><b>{{ t.total }}</b></td></tr>\n</table>{% if t.pending | default(0) > 0 %}\n\n<small>{{ t.pending }} charge(s) with the amount still pending, not in the total.</small>{% endif %}{% endif %}"
+      - type: grid
+        cards:
+          - type: heading
+            heading: Car
+            icon: "mdi:car-electric"
+          - type: picture-entity
+            entity: image.ex5_car
+            show_name: false
+            show_state: false
+            grid_options:
+              columns: full
+          - type: tile
+            entity: binary_sensor.ex5_charging
+            name: Charging
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_session_energy
+            name: This charge
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_last_charge
+            name: Last charge
+            grid_options:
+              columns: full
+          - type: heading
+            heading: By month
+            icon: "mdi:chart-bar"
+          - type: statistics-graph
+            title: kWh charged
+            chart_type: bar
+            period: month
+            days_to_show: 365
+            stat_types:
+              - change
+            entities:
+              - entity: "ex5_insights:energy_ac"
+                name: AC
+              - entity: "ex5_insights:energy_dc"
+                name: DC
+            grid_options:
+              columns: full
+          - type: statistics-graph
+            title: Cost
+            chart_type: bar
+            period: month
+            days_to_show: 365
+            stat_types:
+              - change
+            hide_legend: true
+            entities:
+              - entity: "ex5_insights:cost"
+                name: Cost
+            grid_options:
+              columns: full

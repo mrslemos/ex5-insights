@@ -1,0 +1,103 @@
+set_charge_cost:
+  fields:
+    cost:
+      required: true
+      example: 45.90
+      selector:
+        number:
+          min: 0
+          max: 100000
+          step: 0.01
+          mode: box
+    charge_id:
+      selector:
+        number:
+          min: 1
+          max: 1000000
+          mode: box
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: ex5_insights
+
+set_charge_energy:
+  fields:
+    kwh:
+      required: true
+      example: 43.98
+      selector:
+        number:
+          min: 0.1
+          max: 500
+          step: 0.01
+          mode: box
+    charge_id:
+      selector:
+        number:
+          min: 1
+          max: 1000000
+          mode: box
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: ex5_insights
+
+set_month_distance:
+  fields:
+    month:
+      required: true
+      example: "2026-01"
+      selector:
+        text:
+    km:
+      example: 4000
+      selector:
+        number:
+          min: 0
+          max: 100000
+          mode: box
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: ex5_insights
+
+delete_charge:
+  fields:
+    charge_id:
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 1000000
+          mode: box
+    restore:
+      default: false
+      selector:
+        boolean:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: ex5_insights
+
+import_charges:
+  fields:
+    file:
+      required: true
+      example: "charges.csv"
+      selector:
+        text:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: ex5_insights
+
+export_charges:
+  fields:
+    file:
+      example: "ex5_insights_charges.csv"
+      selector:
+        text:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: ex5_insights
