@@ -49,6 +49,28 @@ def scalar(v):
     return json.dumps(s, ensure_ascii=False)
 
 
+RANGE_NOTE = {
+    True: (
+        "<small><b>Como é calculado.</b> A autonomia real vem do seu histórico: os km das viagens mais recentes "
+        "até somar 100% de bateria gasta, contando também o que o carro gasta parado (ar, perdas). <b>Estrada</b> são "
+        "viagens de 10 km ou mais com mais da metade do trajeto a 70 km/h ou mais; as demais são <b>cidade</b>. "
+        "<b>Carga atual</b> é a autonomia real aplicada à bateria de agora. <b>Pelo carro</b> é a estimativa do "
+        "próprio EX5. A <b>capacidade máx.</b> é medida nas recargas de 20 pontos ou mais, e a <b>saúde</b> a "
+        "compara com os 60,22 kWh de fábrica. Enquanto o histórico não soma 100% de bateria gasta, o valor é uma "
+        "prévia.</small>"
+    ),
+    False: (
+        "<small><b>How it is calculated.</b> Real range comes from your history: the km of the latest trips until "
+        "100% of battery has been used, including what the car uses while parked (climate, losses). <b>Highway</b> "
+        "trips are 10 km or longer with more than half of the way at 70 km/h or more; the others are <b>city</b>. "
+        "<b>Current charge</b> applies the real range to the battery now. <b>By the car</b> is the EX5's own "
+        "estimate. <b>Max. capacity</b> is measured in charges of 20 points or more, and <b>health</b> compares it "
+        "with the 60.22 kWh from the factory. Until the history adds up to 100% of battery used, the value is a "
+        "preview.</small>"
+    ),
+}
+
+
 def dash(pt):
     T = lambda en, p: p if pt else en  # noqa: E731
     pend, free = T("pending", "a informar"), T("free", "grátis")
@@ -98,6 +120,7 @@ def dash(pt):
 
     car_view = {
         "type": "sections", "title": "Geely EX5", "path": "ex5", "icon": "mdi:car-electric", "max_columns": 2,
+        "header": header("Overview"),
         "sections": [
             {"type": "grid", "cards": [
                 {"type": "heading", "heading": T("Car", "Carro"), "icon": "mdi:car-electric"},
@@ -146,6 +169,9 @@ def dash(pt):
                  "period": "month", "days_to_show": 1095, "stat_types": ["mean"],
                  "grid_options": {"columns": "full"},
                  "entities": [{"entity": "sensor.ex5_battery_health", "name": T("Health", "Saúde")}]},
+            ]},
+            {"type": "grid", "column_span": 2, "cards": [
+                {"type": "markdown", "text_only": True, "grid_options": {"columns": "full"}, "content": RANGE_NOTE[pt]},
             ]},
         ],
     }

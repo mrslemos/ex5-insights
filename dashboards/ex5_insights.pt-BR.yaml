@@ -6,6 +6,11 @@ views:
     path: ex5
     icon: "mdi:car-electric"
     max_columns: 2
+    header:
+      card:
+        type: markdown
+        text_only: true
+        content: "# Overview"
     sections:
       - type: grid
         cards:
@@ -287,6 +292,14 @@ views:
             entities:
               - entity: sensor.ex5_battery_health
                 name: "Saúde"
+      - type: grid
+        column_span: 2
+        cards:
+          - type: markdown
+            text_only: true
+            grid_options:
+              columns: full
+            content: "<small><b>Como é calculado.</b> A autonomia real vem do seu histórico: os km das viagens mais recentes até somar 100% de bateria gasta, contando também o que o carro gasta parado (ar, perdas). <b>Estrada</b> são viagens de 10 km ou mais com mais da metade do trajeto a 70 km/h ou mais; as demais são <b>cidade</b>. <b>Carga atual</b> é a autonomia real aplicada à bateria de agora. <b>Pelo carro</b> é a estimativa do próprio EX5. A <b>capacidade máx.</b> é medida nas recargas de 20 pontos ou mais, e a <b>saúde</b> a compara com os 60,22 kWh de fábrica. Enquanto o histórico não soma 100% de bateria gasta, o valor é uma prévia.</small>"
   - type: sections
     title: Timeline
     path: viagens
