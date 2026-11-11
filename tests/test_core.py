@@ -1,12 +1,14 @@
 """Unit tests for the pure logic (run with: python3 -m unittest discover tests)."""
 import importlib.util
 import pathlib
+import sys
 import unittest
 from datetime import datetime, timedelta, timezone
 
 _CORE = pathlib.Path(__file__).parents[1] / "custom_components" / "ex5_insights" / "core.py"
 _spec = importlib.util.spec_from_file_location("core", _CORE)
 core = importlib.util.module_from_spec(_spec)
+sys.modules["core"] = core  # dataclasses look the module up while it loads
 _spec.loader.exec_module(core)
 
 BRT = timezone(timedelta(hours=-3))

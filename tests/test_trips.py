@@ -1,6 +1,7 @@
 """Unit tests for trips, real range, battery capacity and the offline place names."""
 import importlib.util
 import pathlib
+import sys
 import unittest
 from datetime import datetime, timedelta, timezone
 
@@ -10,6 +11,7 @@ _DIR = pathlib.Path(__file__).parents[1] / "custom_components" / "ex5_insights"
 def _load(name):
     spec = importlib.util.spec_from_file_location(name, _DIR / f"{name}.py")
     mod = importlib.util.module_from_spec(spec)
+    sys.modules[name] = mod  # dataclasses look the module up while it loads
     spec.loader.exec_module(mod)
     return mod
 
@@ -154,7 +156,7 @@ class PlaceNames(unittest.TestCase):
     def test_brazil_and_federal_district(self):
         p = geo.Places()
         self.assertEqual(p.name(-15.7997, -47.8645), "Plano Piloto")  # National Congress
-        self.assertEqual(p.name(-15.8410, -48.0270), "Águas Claras")
+        self.assertEqual(p.name(-15.8333, -48.0564), "Taguatinga")
         self.assertEqual(p.name(-15.8176, -48.1428), "Ceilândia")  # Sol Nascente, shown as Ceilândia
         self.assertEqual(p.name(-16.6799, -49.2550), "Goiânia")
         self.assertEqual(p.name(-23.5503, -46.6340), "São Paulo")
