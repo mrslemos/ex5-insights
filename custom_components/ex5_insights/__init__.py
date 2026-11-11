@@ -7,13 +7,15 @@ import voluptuous as vol
 
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant, ServiceCall, ServiceResponse, SupportsResponse
+from homeassistant.core import Event, HomeAssistant, ServiceCall, ServiceResponse, SupportsResponse, callback
 from homeassistant.exceptions import ConfigEntryNotReady, HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers.event import async_call_later
 
-from .const import DOMAIN
+from .const import CONF_DEVICE, DOMAIN
 from .http import async_register as async_register_http
-from .tracker import Ex5Tracker
+from .tracker import Ex5Tracker, resolve_entities
 
 PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR, Platform.SELECT, Platform.NUMBER, Platform.IMAGE,
              Platform.CALENDAR]
@@ -41,7 +43,44 @@ async def async_setup_entry(hass: HomeAssistant, entry: Ex5ConfigEntry) -> bool:
     entry.runtime_data = tracker
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(_async_reload))
+    _follow_renames(hass, entry)
     return True
+
+
+RENAME_DELAY = 5  # seconds: renaming a whole device sends one event per entity
+
+
+def _follow_renames(hass: HomeAssistant, entry: Ex5ConfigEntry) -> None:
+    """Reload when Geely Connect's entities are renamed, enabled, added or removed, so the tracker follows them."""
+    pending = None
+
+    @callback
+    def _check(_now) -> None:
+        nonlocal pending
+        pending = None
+        if entry.state is not ConfigEntryState.LOADED:
+            return
+        if resolve_entities(hass, entry.data[CONF_DEVICE]) != entry.runtime_data.entities:
+            hass.config_entries.async_schedule_reload(entry.entry_id)
+
+    @callback
+    def _changed(event: Event) -> None:
+        nonlocal pending
+        data = event.data
+        if data.get("action") == "update" and "entity_id" not in data.get("changes", {}):
+            return
+        if pending is None:
+            pending = async_call_later(hass, RENAME_DELAY, _check)
+
+    unsub = hass.bus.async_listen(er.EVENT_ENTITY_REGISTRY_UPDATED, _changed)
+
+    @callback
+    def _stop() -> None:
+        unsub()
+        if pending:
+            pending()
+
+    entry.async_on_unload(_stop)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: Ex5ConfigEntry) -> bool:
