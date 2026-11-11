@@ -9,6 +9,8 @@ from homeassistant.helpers.entity import Entity
 from .const import CONF_DEVICE, DOMAIN, SIGNAL_UPDATE
 from .tracker import Ex5Tracker
 
+_HAS_VIA_DEVICE_ID = "via_device_id" in getattr(DeviceInfo, "__annotations__", {})
+
 
 class Ex5Entity(Entity):
     _attr_has_entity_name = True
@@ -21,16 +23,20 @@ class Ex5Entity(Entity):
         # Fixed English entity ids (sensor.ex5_month_cost...) so the ready-made dashboards work in any language.
         suffix = "" if tracker.is_first_entry else f"_{tracker.short}"
         self.entity_id = f"{platform}.ex5_{key}{suffix}"
-        via = None
+        # Link to the Geely Connect car. HA 2026.8+ takes the device id (via_device_id) and warns about
+        # via_device, which stops working in 2027.8; older versions only know via_device.
+        via = {}
         dev = dr.async_get(tracker.hass).async_get(tracker.entry.data[CONF_DEVICE])
-        if dev and dev.identifiers:
-            via = next(iter(dev.identifiers))
+        if dev and _HAS_VIA_DEVICE_ID:
+            via["via_device_id"] = dev.id
+        elif dev and dev.identifiers:
+            via["via_device"] = next(iter(dev.identifiers))
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, tracker.entry.entry_id)},
             name="EX5",
             manufacturer="EX5 Insights",
             model="Geely EX5",
-            via_device=via,
+            **via,
         )
 
     async def async_added_to_hass(self) -> None:
