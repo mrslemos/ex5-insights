@@ -314,7 +314,7 @@ views:
       - type: grid
         cards:
           - type: heading
-            heading: Rastro do dia
+            heading: Trajetos do dia
             icon: "mdi:map-marker-path"
           - type: "custom:ex5-timeline-card"
             height: 420

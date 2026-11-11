@@ -314,7 +314,7 @@ views:
       - type: grid
         cards:
           - type: heading
-            heading: Path of the day
+            heading: Trips of the day
             icon: "mdi:map-marker-path"
           - type: "custom:ex5-timeline-card"
             height: 420

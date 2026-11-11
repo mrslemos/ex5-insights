@@ -180,7 +180,7 @@ def dash(pt):
         "max_columns": 2, "header": header("Timeline"),
         "sections": [
             {"type": "grid", "cards": [
-                {"type": "heading", "heading": T("Path of the day", "Rastro do dia"), "icon": "mdi:map-marker-path"},
+                {"type": "heading", "heading": T("Trips of the day", "Trajetos do dia"), "icon": "mdi:map-marker-path"},
                 {"type": "custom:ex5-timeline-card", "height": 420, "grid_options": {"columns": "full"}},
             ]},
             {"type": "grid", "cards": [
