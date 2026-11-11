@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 DOMAIN = "ex5_insights"
+VERSION = "0.2.0"  # also in manifest.json; changes the cards' script address so browsers fetch the new one
 SOURCE_DOMAIN = "geely_connect"  # the Geely Connect integration (YossiKon/geely-connect)
 
 CONF_DEVICE = "device_id"
@@ -10,13 +11,22 @@ CONF_NOTIFY = "notify_service"
 CONF_CAPACITY = "capacity"
 CONF_PLACES = "places"
 CONF_END_MINUTES = "end_minutes"
+CONF_CAPACITY_FACTOR = "capacity_factor"
 
 DEFAULT_CAPACITY = 60.22  # kWh, Geely EX5 battery (usable, as published)
 DEFAULT_END_MINUTES = 3  # a charge ends this long after power and charger stop
+DEFAULT_CAPACITY_FACTOR = 1.0
+# A trip ends when the odometer and trip meter stop for this long with the car parked (park brake or engine off);
+# then the arrival GPS is awaited up to ARRIVAL_WAIT. Trips shorter than MIN_TRIP_KM are not recorded.
+TRIP_END_SECONDS = 300
+ARRIVAL_WAIT = 180
+MIN_TRIP_KM = 0.3
 
 STORAGE_VERSION = 1
 SIGNAL_UPDATE = f"{DOMAIN}_update_{{}}"  # formatted with the entry id
 EVENT_CHARGE_FINISHED = f"{DOMAIN}_charge_finished"
+EVENT_TRIP_FINISHED = f"{DOMAIN}_trip_finished"
+FRONTEND_URL = f"/{DOMAIN}"  # cards and car pictures
 
 # Geely Connect unique ids are "geely_<VIN>_<key>". The keys used here:
 KEY_BATTERY = "battery"
@@ -26,7 +36,12 @@ KEY_ODOMETER = "total_mileage"
 KEY_TRACKER = "tracker"
 KEY_REPORTED = "car_reported_at"
 KEY_RANGE = "range"
-SOURCE_KEYS = (KEY_BATTERY, KEY_POWER, KEY_CHARGER, KEY_ODOMETER, KEY_TRACKER, KEY_REPORTED, KEY_RANGE)
+KEY_TRIP = "trip_meter"  # 0.1 km
+KEY_PARK = "bs_park_brake_engaged"
+KEY_ENGINE = "engine_state"  # "Off" when off
+KEY_PACK = "pack_power"  # kW at the battery, negative while charging
+SOURCE_KEYS = (KEY_BATTERY, KEY_POWER, KEY_CHARGER, KEY_ODOMETER, KEY_TRACKER, KEY_REPORTED, KEY_RANGE, KEY_TRIP,
+               KEY_PARK, KEY_ENGINE, KEY_PACK)
 REQUIRED_KEYS = (KEY_BATTERY, KEY_POWER, KEY_CHARGER, KEY_ODOMETER, KEY_TRACKER)
 CHARGING_STATE = "Charging"
 
@@ -34,6 +49,9 @@ ACTION_COST = "EX5I_COST_{}"  # formatted with the first 8 characters of the ent
 ACTION_KWH = "EX5I_KWH_{}"
 
 IMAGE_EXTENSIONS = (".png", ".jpg", ".jpeg", ".webp", ".svg")
+# Body color for the Geely Connect car drawing, by picture name; dark ones get light text on the body.
+PAINT = {"branco-storm": "#e6e7e8", "cinza-ash": "#62666b", "prata-moon": "#b4b7bb", "preto-carbon": "#24272c"}
+DARK_PAINT = ("cinza-ash", "preto-carbon")
 
 MONTHS = {
     "pt": ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro",
@@ -65,6 +83,12 @@ TEXTS = {
         "summary_pending": "custo a informar",
         "hours": "{h} h {m} min",
         "minutes": "{m} min",
+        "street": "Rua",
+        "unknown": "desconhecido",
+        "trip_summary": "{origin} → {destination} · {km} km",
+        "trip_description": "Saída {start} · chegada {end} ({minutes} min) · {km} km · bateria {b0}% → {b1}%",
+        "trip_consumption": " · {kwh100} kWh/100 km",
+        "trip_map": "Trajeto no mapa: {link}",
     },
     "en": {
         "month_label": "{month} {year}",
@@ -87,6 +111,12 @@ TEXTS = {
         "summary_pending": "cost pending",
         "hours": "{h} h {m} min",
         "minutes": "{m} min",
+        "street": "Street",
+        "unknown": "unknown",
+        "trip_summary": "{origin} → {destination} · {km} km",
+        "trip_description": "Left {start} · arrived {end} ({minutes} min) · {km} km · battery {b0}% → {b1}%",
+        "trip_consumption": " · {kwh100} kWh/100 km",
+        "trip_map": "Route on the map: {link}",
     },
 }
 

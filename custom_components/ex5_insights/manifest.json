@@ -2,6 +2,7 @@
   "domain": "ex5_insights",
   "name": "EX5 Insights",
   "after_dependencies": ["mobile_app", "recorder"],
+  "dependencies": ["http", "frontend"],
   "codeowners": ["@mrslemos"],
   "config_flow": true,
   "documentation": "https://github.com/mrslemos/ex5-insights",
@@ -9,5 +10,5 @@
   "iot_class": "calculated",
   "issue_tracker": "https://github.com/mrslemos/ex5-insights/issues",
   "requirements": [],
-  "version": "0.1.0"
+  "version": "0.2.0"
 }

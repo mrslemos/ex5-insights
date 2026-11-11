@@ -8,13 +8,15 @@
           "device_id": "Car",
           "color": "Car color",
           "notify_service": "Phone for notifications",
-          "capacity": "Usable battery capacity",
+          "capacity": "Published usable capacity",
+          "capacity_factor": "Capacity calibration factor",
           "end_minutes": "A charge ends after"
         },
         "data_description": {
           "color": "Picture shown on the dashboard.",
           "notify_service": "Charge finished, with fields to enter the amount paid (text fields work on iPhone; on Android use the dashboard). Leave empty for no notifications.",
-          "capacity": "Used when the car does not report the charging power: battery rise × capacity. 60.22 kWh is the published value.",
+          "capacity": "60.22 kWh for the EX5. The reference for battery health, and used until the real capacity is measured (it is measured in charges of 20 points or more).",
+          "capacity_factor": "Multiplies the measured capacity. 1 = as measured. If an OBD2 app (e.g. ABRP) shows the battery health, factor = (health × 60.22 / 100) ÷ measured capacity.",
           "end_minutes": "Minutes without power and with the charger stopped."
         }
       }
@@ -43,13 +45,15 @@
         "data": {
           "color": "Car color",
           "notify_service": "Phone for notifications",
-          "capacity": "Usable battery capacity",
+          "capacity": "Published usable capacity",
+          "capacity_factor": "Capacity calibration factor",
           "end_minutes": "A charge ends after"
         },
         "data_description": {
           "color": "Picture shown on the dashboard.",
           "notify_service": "Charge finished, with fields to enter the amount paid (text fields work on iPhone; on Android use the dashboard). Leave empty for no notifications.",
-          "capacity": "Used when the car does not report the charging power: battery rise × capacity. 60.22 kWh is the published value.",
+          "capacity": "60.22 kWh for the EX5. The reference for battery health, and used until the real capacity is measured (it is measured in charges of 20 points or more).",
+          "capacity_factor": "Multiplies the measured capacity. 1 = as measured. If an OBD2 app (e.g. ABRP) shows the battery health, factor = (health × 60.22 / 100) ÷ measured capacity.",
           "end_minutes": "Minutes without power and with the charger stopped."
         }
       },
@@ -139,11 +143,56 @@
       },
       "session_energy": {
         "name": "Energy of this charge"
+      },
+      "real_range": {
+        "name": "Real range"
+      },
+      "real_range_highway": {
+        "name": "Real range on the highway"
+      },
+      "real_range_city": {
+        "name": "Real range in the city"
+      },
+      "range_now": {
+        "name": "Range with the current battery"
+      },
+      "range_now_highway": {
+        "name": "Highway range with the current battery"
+      },
+      "range_now_city": {
+        "name": "City range with the current battery"
+      },
+      "car_range_full": {
+        "name": "Range by the car (full battery)"
+      },
+      "car_range": {
+        "name": "Range by the car"
+      },
+      "battery": {
+        "name": "Battery"
+      },
+      "odometer": {
+        "name": "Odometer"
+      },
+      "battery_capacity": {
+        "name": "Real battery capacity"
+      },
+      "battery_health": {
+        "name": "Battery health"
+      },
+      "last_trip": {
+        "name": "Last trip"
+      },
+      "month_trips": {
+        "name": "Trips of the month"
       }
     },
     "binary_sensor": {
       "charging": {
         "name": "Charging"
+      },
+      "driving": {
+        "name": "Driving"
       }
     },
     "select": {
@@ -162,6 +211,11 @@
     "image": {
       "car": {
         "name": "Car"
+      }
+    },
+    "calendar": {
+      "trips": {
+        "name": "Trips"
       }
     }
   },

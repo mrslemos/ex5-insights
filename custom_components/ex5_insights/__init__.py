@@ -12,9 +12,11 @@ from homeassistant.exceptions import ConfigEntryNotReady, HomeAssistantError, Se
 from homeassistant.helpers import config_validation as cv
 
 from .const import DOMAIN
+from .http import async_register as async_register_http
 from .tracker import Ex5Tracker
 
-PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR, Platform.SELECT, Platform.NUMBER, Platform.IMAGE]
+PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR, Platform.SELECT, Platform.NUMBER, Platform.IMAGE,
+             Platform.CALENDAR]
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 type Ex5ConfigEntry = ConfigEntry[Ex5Tracker]
@@ -34,6 +36,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: Ex5ConfigEntry) -> bool:
     except HomeAssistantError as err:
         # Geely Connect may still be loading: try again later.
         raise ConfigEntryNotReady(str(err)) from err
+    await async_register_http(hass)
     await tracker.async_start()
     entry.runtime_data = tracker
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

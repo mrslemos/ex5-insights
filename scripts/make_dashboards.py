@@ -81,9 +81,98 @@ def dash(pt):
                 "conditions": [{"condition": "state", "entity": entity, "state_not": "unavailable"}],
                 "card": {"type": "entities", "title": title, "entities": [{"entity": entity, "name": name}]}}
 
+    trips_list = (
+        "{% set e = 'sensor.ex5_month_trips' %}{% set vs = state_attr(e, 'trips') or [] %}"
+        "{% set days = " + T("['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']",
+                             "['seg.', 'ter.', 'qua.', 'qui.', 'sex.', 'sáb.', 'dom.']") + " %}"
+        "{% if vs | count == 0 %}" + T("No trips in ", "Nenhuma viagem registrada em ")
+        + "{{ (state_attr(e, 'month_label') or '') | lower }}.{% else %}{% set ns = namespace(day='') %}"
+        "{% for x in vs %}{% if x.day != ns.day %}{% set ns.day = x.day %}{% set d = as_datetime(x.day) %}\n\n"
+        "**{{ days[d.weekday()] }} {{ d.strftime('" + T("%m/%d", "%d/%m") + "') }}**\n{% endif %}\n"
+        "{{ x.time }} · {{ x.summary }}{% if x.map %} · [" + T("map", "mapa") + "]({{ x.map }}){% endif %}  "
+        "{% endfor %}{% endif %}"
+    )
+
+    def header(text):
+        return {"card": {"type": "markdown", "text_only": True, "content": f"# {text}"}}
+
+    car_view = {
+        "type": "sections", "title": "Geely EX5", "path": "ex5", "icon": "mdi:car-electric", "max_columns": 2,
+        "sections": [
+            {"type": "grid", "cards": [
+                {"type": "heading", "heading": T("Car", "Carro"), "icon": "mdi:car-electric"},
+                {"type": "custom:ex5-car-card", "grid_options": {"columns": "full"}},
+            ]},
+            {"type": "grid", "cards": [
+                {"type": "heading", "heading": T("Where it is", "Onde está"), "icon": "mdi:map-marker"},
+                {"type": "custom:ex5-map-card", "grid_options": {"columns": "full", "rows": 5}},
+            ]},
+        ],
+    }
+    range_view = {
+        "type": "sections", "title": T("Range", "Autonomia"), "path": T("range", "autonomia"),
+        "icon": "mdi:map-marker-distance", "max_columns": 2, "header": header(T("Range", "Autonomia")),
+        "sections": [
+            {"type": "grid", "cards": [
+                {"type": "heading", "heading": T("Full charge (100%)", "Carga cheia (100%)"), "icon": "mdi:battery"},
+                tile("sensor.ex5_real_range_highway", T("Highway", "Estrada"), "mdi:highway", "blue"),
+                tile("sensor.ex5_real_range_city", T("City", "Cidade"), "mdi:city-variant-outline", "green"),
+                tile("sensor.ex5_real_range", T("Overall", "Geral"), "mdi:map-marker-distance", "purple"),
+                tile("sensor.ex5_car_range_full", T("By the car", "Pelo carro"), "mdi:car-info", "grey"),
+            ]},
+            {"type": "grid", "cards": [
+                {"type": "heading", "heading": T("Current charge", "Carga atual"), "icon": "mdi:battery-50",
+                 "badges": [{"type": "entity", "entity": "sensor.ex5_battery", "show_icon": False}]},
+                tile("sensor.ex5_range_now_highway", T("Highway", "Estrada"), "mdi:highway", "blue"),
+                tile("sensor.ex5_range_now_city", T("City", "Cidade"), "mdi:city-variant-outline", "green"),
+                tile("sensor.ex5_range_now", T("Overall", "Geral"), "mdi:map-marker-distance", "purple"),
+                tile("sensor.ex5_car_range", T("By the car", "Pelo carro"), "mdi:car-info", "grey"),
+            ]},
+            {"type": "grid", "cards": [
+                {"type": "heading", "heading": T("Battery", "Bateria"), "icon": "mdi:car-battery"},
+                tile("sensor.ex5_battery_health", T("Health", "Saúde"), "mdi:battery-heart", "red"),
+                tile("sensor.ex5_battery_capacity", T("Max. capacity", "Capacidade máx."), "mdi:battery-high", "amber"),
+            ]},
+            {"type": "grid", "cards": [
+                {"type": "heading", "heading": T("Over time", "Ao longo do tempo"), "icon": "mdi:chart-line"},
+                {"type": "statistics-graph", "title": T("Range", "Autonomia"), "chart_type": "line", "period": "week",
+                 "days_to_show": 365, "stat_types": ["mean"], "hide_legend": False,
+                 "grid_options": {"columns": "full"},
+                 "entities": [{"entity": "sensor.ex5_real_range_highway", "name": T("Highway", "Estrada")},
+                              {"entity": "sensor.ex5_real_range_city", "name": T("City", "Cidade")},
+                              {"entity": "sensor.ex5_real_range", "name": T("Overall", "Geral")}]},
+                {"type": "statistics-graph", "title": T("Battery health", "Saúde da bateria"), "chart_type": "line",
+                 "period": "month", "days_to_show": 1095, "stat_types": ["mean"],
+                 "grid_options": {"columns": "full"},
+                 "entities": [{"entity": "sensor.ex5_battery_health", "name": T("Health", "Saúde")}]},
+            ]},
+        ],
+    }
+    timeline_view = {
+        "type": "sections", "title": "Timeline", "path": T("trips", "viagens"), "icon": "mdi:map",
+        "max_columns": 2, "header": header("Timeline"),
+        "sections": [
+            {"type": "grid", "cards": [
+                {"type": "heading", "heading": T("Path of the day", "Rastro do dia"), "icon": "mdi:map-marker-path"},
+                {"type": "custom:ex5-timeline-card", "height": 420, "grid_options": {"columns": "full"}},
+            ]},
+            {"type": "grid", "cards": [
+                {"type": "heading", "heading": T("Trips", "Viagens"), "icon": "mdi:calendar-month"},
+                {"type": "calendar", "entities": ["calendar.ex5_trips"], "initial_view": "listWeek",
+                 "grid_options": {"columns": "full"}},
+                {"type": "heading", "heading": T("Trips of the month", "Viagens do mês"),
+                 "icon": "mdi:format-list-bulleted", "heading_style": "subtitle"},
+                {"type": "tile", "entity": "select.ex5_month", "name": T("Month", "Mês"),
+                 "icon": "mdi:calendar-month", "color": "blue", "hide_state": True, "vertical": False,
+                 "features_position": "inline", "features": [{"type": "select-options"}],
+                 "grid_options": {"columns": "full"}},
+                {"type": "markdown", "grid_options": {"columns": "full"}, "content": trips_list},
+            ]},
+        ],
+    }
     return {
         "title": "EX5",
-        "views": [{
+        "views": [car_view, {
             "type": "sections", "title": T("Usage", "Uso"), "path": T("usage", "uso"),
             "icon": "mdi:chart-box-outline", "max_columns": 2,
             "sections": [
@@ -120,6 +209,10 @@ def dash(pt):
                     {"type": "tile", "entity": "sensor.ex5_last_charge", "name": T("Last charge", "Última recarga"),
                      "grid_options": {"columns": "full"}},
                     {"type": "heading", "heading": T("By month", "Por mês"), "icon": "mdi:chart-bar"},
+                    {"type": "statistics-graph", "title": "Km", "chart_type": "bar", "period": "month",
+                     "days_to_show": 365, "stat_types": ["change"], "hide_legend": True,
+                     "entities": [{"entity": "sensor.ex5_odometer", "name": "Km"}],
+                     "grid_options": {"columns": "full"}},
                     {"type": "statistics-graph", "title": T("kWh charged", "kWh carregados"), "chart_type": "bar",
                      "period": "month", "days_to_show": 365, "stat_types": ["change"],
                      "entities": [{"entity": "ex5_insights:energy_ac", "name": "AC"},
@@ -131,7 +224,7 @@ def dash(pt):
                      "grid_options": {"columns": "full"}},
                 ]},
             ],
-        }],
+        }, range_view, timeline_view],
     }
 
 

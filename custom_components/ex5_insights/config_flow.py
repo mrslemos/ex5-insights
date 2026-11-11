@@ -11,8 +11,8 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import selector as sel
 
 from .const import (
-    CONF_CAPACITY, CONF_COLOR, CONF_DEVICE, CONF_END_MINUTES, CONF_NOTIFY, CONF_PLACES, DEFAULT_CAPACITY,
-    DEFAULT_END_MINUTES, DOMAIN, REQUIRED_KEYS, SOURCE_DOMAIN,
+    CONF_CAPACITY, CONF_CAPACITY_FACTOR, CONF_COLOR, CONF_DEVICE, CONF_END_MINUTES, CONF_NOTIFY, CONF_PLACES, DEFAULT_CAPACITY,
+    DEFAULT_CAPACITY_FACTOR, DEFAULT_END_MINUTES, DOMAIN, REQUIRED_KEYS, SOURCE_DOMAIN,
 )
 from .core import RULES
 from .image import list_colors
@@ -40,6 +40,8 @@ async def _settings_schema(hass: HomeAssistant, current: dict) -> vol.Schema:
     fields[vol.Required(CONF_CAPACITY, default=current.get(CONF_CAPACITY, DEFAULT_CAPACITY))] = \
         sel.NumberSelector(sel.NumberSelectorConfig(min=30, max=120, step=0.01, unit_of_measurement="kWh",
                                                     mode=sel.NumberSelectorMode.BOX))
+    fields[vol.Required(CONF_CAPACITY_FACTOR, default=current.get(CONF_CAPACITY_FACTOR, DEFAULT_CAPACITY_FACTOR))] = \
+        sel.NumberSelector(sel.NumberSelectorConfig(min=0.8, max=1.2, step=0.0001, mode=sel.NumberSelectorMode.BOX))
     fields[vol.Required(CONF_END_MINUTES, default=current.get(CONF_END_MINUTES, DEFAULT_END_MINUTES))] = \
         sel.NumberSelector(sel.NumberSelectorConfig(min=1, max=30, step=1, unit_of_measurement="min",
                                                     mode=sel.NumberSelectorMode.BOX))

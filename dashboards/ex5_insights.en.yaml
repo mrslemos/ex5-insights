@@ -2,6 +2,29 @@
 title: EX5
 views:
   - type: sections
+    title: Geely EX5
+    path: ex5
+    icon: "mdi:car-electric"
+    max_columns: 2
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Car
+            icon: "mdi:car-electric"
+          - type: "custom:ex5-car-card"
+            grid_options:
+              columns: full
+      - type: grid
+        cards:
+          - type: heading
+            heading: Where it is
+            icon: "mdi:map-marker"
+          - type: "custom:ex5-map-card"
+            grid_options:
+              columns: full
+              rows: 5
+  - type: sections
     title: Usage
     path: usage
     icon: "mdi:chart-box-outline"
@@ -125,6 +148,19 @@ views:
             heading: By month
             icon: "mdi:chart-bar"
           - type: statistics-graph
+            title: Km
+            chart_type: bar
+            period: month
+            days_to_show: 365
+            stat_types:
+              - change
+            hide_legend: true
+            entities:
+              - entity: sensor.ex5_odometer
+                name: Km
+            grid_options:
+              columns: full
+          - type: statistics-graph
             title: kWh charged
             chart_type: bar
             period: month
@@ -151,3 +187,188 @@ views:
                 name: Cost
             grid_options:
               columns: full
+  - type: sections
+    title: Range
+    path: range
+    icon: "mdi:map-marker-distance"
+    max_columns: 2
+    header:
+      card:
+        type: markdown
+        text_only: true
+        content: "# Range"
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: "Full charge (100%)"
+            icon: "mdi:battery"
+          - type: tile
+            entity: sensor.ex5_real_range_highway
+            name: Highway
+            icon: "mdi:highway"
+            color: blue
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_real_range_city
+            name: City
+            icon: "mdi:city-variant-outline"
+            color: green
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_real_range
+            name: Overall
+            icon: "mdi:map-marker-distance"
+            color: purple
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_car_range_full
+            name: By the car
+            icon: "mdi:car-info"
+            color: grey
+            grid_options:
+              columns: 6
+      - type: grid
+        cards:
+          - type: heading
+            heading: Current charge
+            icon: "mdi:battery-50"
+            badges:
+              - type: entity
+                entity: sensor.ex5_battery
+                show_icon: false
+          - type: tile
+            entity: sensor.ex5_range_now_highway
+            name: Highway
+            icon: "mdi:highway"
+            color: blue
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_range_now_city
+            name: City
+            icon: "mdi:city-variant-outline"
+            color: green
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_range_now
+            name: Overall
+            icon: "mdi:map-marker-distance"
+            color: purple
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_car_range
+            name: By the car
+            icon: "mdi:car-info"
+            color: grey
+            grid_options:
+              columns: 6
+      - type: grid
+        cards:
+          - type: heading
+            heading: Battery
+            icon: "mdi:car-battery"
+          - type: tile
+            entity: sensor.ex5_battery_health
+            name: Health
+            icon: "mdi:battery-heart"
+            color: red
+            grid_options:
+              columns: 6
+          - type: tile
+            entity: sensor.ex5_battery_capacity
+            name: Max. capacity
+            icon: "mdi:battery-high"
+            color: amber
+            grid_options:
+              columns: 6
+      - type: grid
+        cards:
+          - type: heading
+            heading: Over time
+            icon: "mdi:chart-line"
+          - type: statistics-graph
+            title: Range
+            chart_type: line
+            period: week
+            days_to_show: 365
+            stat_types:
+              - mean
+            hide_legend: false
+            grid_options:
+              columns: full
+            entities:
+              - entity: sensor.ex5_real_range_highway
+                name: Highway
+              - entity: sensor.ex5_real_range_city
+                name: City
+              - entity: sensor.ex5_real_range
+                name: Overall
+          - type: statistics-graph
+            title: Battery health
+            chart_type: line
+            period: month
+            days_to_show: 1095
+            stat_types:
+              - mean
+            grid_options:
+              columns: full
+            entities:
+              - entity: sensor.ex5_battery_health
+                name: Health
+  - type: sections
+    title: Timeline
+    path: trips
+    icon: "mdi:map"
+    max_columns: 2
+    header:
+      card:
+        type: markdown
+        text_only: true
+        content: "# Timeline"
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Path of the day
+            icon: "mdi:map-marker-path"
+          - type: "custom:ex5-timeline-card"
+            height: 420
+            grid_options:
+              columns: full
+      - type: grid
+        cards:
+          - type: heading
+            heading: Trips
+            icon: "mdi:calendar-month"
+          - type: calendar
+            entities:
+              - calendar.ex5_trips
+            initial_view: listWeek
+            grid_options:
+              columns: full
+          - type: heading
+            heading: Trips of the month
+            icon: "mdi:format-list-bulleted"
+            heading_style: subtitle
+          - type: tile
+            entity: select.ex5_month
+            name: Month
+            icon: "mdi:calendar-month"
+            color: blue
+            hide_state: true
+            vertical: false
+            features_position: inline
+            features:
+              - type: select-options
+            grid_options:
+              columns: full
+          - type: markdown
+            grid_options:
+              columns: full
+            content: "{% set e = 'sensor.ex5_month_trips' %}{% set vs = state_attr(e, 'trips') or [] %}{% set days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] %}{% if vs | count == 0 %}No trips in {{ (state_attr(e, 'month_label') or '') | lower }}.{% else %}{% set ns = namespace(day='') %}{% for x in vs %}{% if x.day != ns.day %}{% set ns.day = x.day %}{% set d = as_datetime(x.day) %}\n\n**{{ days[d.weekday()] }} {{ d.strftime('%m/%d') }}**\n{% endif %}\n{{ x.time }} · {{ x.summary }}{% if x.map %} · [map]({{ x.map }}){% endif %}  {% endfor %}{% endif %}"

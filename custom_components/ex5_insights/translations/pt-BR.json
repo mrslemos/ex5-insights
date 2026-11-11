@@ -8,13 +8,15 @@
           "device_id": "Carro",
           "color": "Cor do carro",
           "notify_service": "Celular para os avisos",
-          "capacity": "Capacidade útil da bateria",
+          "capacity": "Capacidade útil publicada",
+          "capacity_factor": "Fator de calibração da capacidade",
           "end_minutes": "A recarga termina depois de"
         },
         "data_description": {
           "color": "Imagem mostrada no painel.",
           "notify_service": "Recarga concluída, com campos para informar o valor pago (o campo de texto funciona no iPhone; no Android, use o painel). Deixe vazio para não receber avisos.",
-          "capacity": "Usada quando o carro não informa a potência: subida da bateria × capacidade. 60,22 kWh é o valor de fábrica.",
+          "capacity": "60,22 kWh no EX5. É a referência para a saúde da bateria e vale até a capacidade real ser medida (ela é medida nas recargas de 20 pontos ou mais).",
+          "capacity_factor": "Multiplica a capacidade medida. 1 = como medida. Se um app de OBD2 (ex.: ABRP) mostrar a saúde da bateria, fator = (saúde × 60,22 / 100) ÷ capacidade medida.",
           "end_minutes": "Minutos sem potência e com o carregador parado."
         }
       }
@@ -43,13 +45,15 @@
         "data": {
           "color": "Cor do carro",
           "notify_service": "Celular para os avisos",
-          "capacity": "Capacidade útil da bateria",
+          "capacity": "Capacidade útil publicada",
+          "capacity_factor": "Fator de calibração da capacidade",
           "end_minutes": "A recarga termina depois de"
         },
         "data_description": {
           "color": "Imagem mostrada no painel.",
           "notify_service": "Recarga concluída, com campos para informar o valor pago (o campo de texto funciona no iPhone; no Android, use o painel). Deixe vazio para não receber avisos.",
-          "capacity": "Usada quando o carro não informa a potência: subida da bateria × capacidade. 60,22 kWh é o valor de fábrica.",
+          "capacity": "60,22 kWh no EX5. É a referência para a saúde da bateria e vale até a capacidade real ser medida (ela é medida nas recargas de 20 pontos ou mais).",
+          "capacity_factor": "Multiplica a capacidade medida. 1 = como medida. Se um app de OBD2 (ex.: ABRP) mostrar a saúde da bateria, fator = (saúde × 60,22 / 100) ÷ capacidade medida.",
           "end_minutes": "Minutos sem potência e com o carregador parado."
         }
       },
@@ -139,11 +143,56 @@
       },
       "session_energy": {
         "name": "Energia desta recarga"
+      },
+      "real_range": {
+        "name": "Autonomia real"
+      },
+      "real_range_highway": {
+        "name": "Autonomia real na estrada"
+      },
+      "real_range_city": {
+        "name": "Autonomia real na cidade"
+      },
+      "range_now": {
+        "name": "Alcance com a bateria atual"
+      },
+      "range_now_highway": {
+        "name": "Alcance na estrada com a bateria atual"
+      },
+      "range_now_city": {
+        "name": "Alcance na cidade com a bateria atual"
+      },
+      "car_range_full": {
+        "name": "Autonomia pelo carro (carga cheia)"
+      },
+      "car_range": {
+        "name": "Autonomia pelo carro"
+      },
+      "battery": {
+        "name": "Bateria"
+      },
+      "odometer": {
+        "name": "Odômetro"
+      },
+      "battery_capacity": {
+        "name": "Capacidade real da bateria"
+      },
+      "battery_health": {
+        "name": "Saúde da bateria"
+      },
+      "last_trip": {
+        "name": "Última viagem"
+      },
+      "month_trips": {
+        "name": "Viagens do mês"
       }
     },
     "binary_sensor": {
       "charging": {
         "name": "Carregando"
+      },
+      "driving": {
+        "name": "Em viagem"
       }
     },
     "select": {
@@ -162,6 +211,11 @@
     "image": {
       "car": {
         "name": "Carro"
+      }
+    },
+    "calendar": {
+      "trips": {
+        "name": "Viagens"
       }
     }
   },
