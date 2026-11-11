@@ -29,6 +29,11 @@ views:
     path: usage
     icon: "mdi:chart-box-outline"
     max_columns: 2
+    header:
+      card:
+        type: markdown
+        text_only: true
+        content: "# Car usage"
     sections:
       - type: grid
         cards:
@@ -111,39 +116,16 @@ views:
               entities:
                 - entity: number.ex5_pending_station_kwh
                   name: Station kWh
-          - type: heading
+          - type: "custom:ex5-heading"
             heading: Charges of the month
             icon: "mdi:ev-station"
+            space_above: 24
           - type: markdown
             grid_options:
               columns: full
             content: "{% set e = 'sensor.ex5_month_table' %}{% set rs = state_attr(e, 'rows') or [] %}{% set t = state_attr(e, 'total') or {} %}{% if rs | count == 0 %}No charges in {{ state_attr(e, 'month_label') }}.{% else %}\n<table width=\"100%\">\n<tr><th align=\"left\">Day</th><th align=\"left\">Time</th><th align=\"right\">kWh</th><th align=\"right\">Price/kWh</th><th align=\"right\">Total</th></tr>\n{% for x in rs %}<tr><td>{{ x.day }}</td><td>{{ x.time or '—' }}</td><td align=\"right\">{{ x.kwh }}</td><td align=\"right\">{{ 'pending' if x.pending else ('—' if x.free else x.price) }}</td><td align=\"right\">{{ 'pending' if x.pending else ('free' if x.free else x.total) }}</td></tr>\n{% endfor %}<tr><td colspan=\"2\"><b>Total</b></td><td align=\"right\"><b>{{ t.kwh }}</b></td><td align=\"right\"><b>{{ t.price or '—' }}</b></td><td align=\"right\"><b>{{ t.total }}</b></td></tr>\n</table>{% if t.pending | default(0) > 0 %}\n\n<small>{{ t.pending }} charge(s) with the amount still pending, not in the total.</small>{% endif %}{% endif %}"
       - type: grid
         cards:
-          - type: heading
-            heading: Car
-            icon: "mdi:car-electric"
-          - type: picture-entity
-            entity: image.ex5_car
-            show_name: false
-            show_state: false
-            grid_options:
-              columns: full
-          - type: tile
-            entity: binary_sensor.ex5_charging
-            name: Charging
-            grid_options:
-              columns: 6
-          - type: tile
-            entity: sensor.ex5_session_energy
-            name: This charge
-            grid_options:
-              columns: 6
-          - type: tile
-            entity: sensor.ex5_last_charge
-            name: Last charge
-            grid_options:
-              columns: full
           - type: heading
             heading: By month
             icon: "mdi:chart-bar"
@@ -174,19 +156,6 @@ views:
                 name: DC
             grid_options:
               columns: full
-          - type: statistics-graph
-            title: Cost
-            chart_type: bar
-            period: month
-            days_to_show: 365
-            stat_types:
-              - change
-            hide_legend: true
-            entities:
-              - entity: "ex5_insights:cost"
-                name: Cost
-            grid_options:
-              columns: full
   - type: sections
     title: Range
     path: range
@@ -200,9 +169,10 @@ views:
     sections:
       - type: grid
         cards:
-          - type: heading
+          - type: "custom:ex5-heading"
             heading: "Full charge (100%)"
             icon: "mdi:battery"
+            icon_color: "var(--green-color)"
           - type: tile
             entity: sensor.ex5_real_range_highway
             name: Highway
@@ -233,13 +203,9 @@ views:
               columns: 6
       - type: grid
         cards:
-          - type: heading
-            heading: Current charge
+          - type: "custom:ex5-heading"
+            heading: "Current charge ({battery}%)"
             icon: "mdi:battery-50"
-            badges:
-              - type: entity
-                entity: sensor.ex5_battery
-                show_icon: false
           - type: tile
             entity: sensor.ex5_range_now_highway
             name: Highway

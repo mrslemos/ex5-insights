@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 DOMAIN = "ex5_insights"
-VERSION = "0.2.0"  # also in manifest.json; changes the cards' script address so browsers fetch the new one
+VERSION = "0.2.1"  # also in manifest.json; changes the cards' script address so browsers fetch the new one
 SOURCE_DOMAIN = "geely_connect"  # the Geely Connect integration (YossiKon/geely-connect)
 
 CONF_DEVICE = "device_id"
@@ -64,6 +64,7 @@ MONTHS = {
 TEXTS = {
     "pt": {
         "month_label": "{month} de {year}",
+        "this_month": "Este mês",
         "home": "Casa",
         "unknown_place": "Outro local",
         "finished_title": "EX5: recarga {kind} concluída",
@@ -92,6 +93,7 @@ TEXTS = {
     },
     "en": {
         "month_label": "{month} {year}",
+        "this_month": "This month",
         "home": "Home",
         "unknown_place": "Other place",
         "finished_title": "EX5: {kind} charge finished",

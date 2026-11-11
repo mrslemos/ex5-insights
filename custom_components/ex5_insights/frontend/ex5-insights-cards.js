@@ -8,7 +8,7 @@
 // The cards read the car from sensor.ex5_battery (attributes geely_prefix, tracker, car_image, paint). With more
 // than one car, set `entity:` to that car's battery sensor (and `entry:` on the timeline card).
 (() => {
-  const VERSION = "0.2.0";
+  const VERSION = "0.2.1";
   const T = {
     en: {
       noGeely: "The Geely Connect cards were not found. Is Geely Connect installed and up to date?",
@@ -135,6 +135,60 @@
         stack.appendChild(top);
       }
       this._cards.forEach((c) => { c.hass = this._hass; });
+    }
+  }
+
+  // ---------------------------------------------------------------- heading card
+
+  // A standard heading card with three extras that would otherwise need card-mod: "{battery}" in the text becomes
+  // the battery level, `icon_color` colors the icon and `space_above` (px) adds room above the title.
+  //   type: custom:ex5-heading
+  //   heading: "Carga Atual ({battery}%)"
+  //   icon: mdi:battery-50
+  //   icon_color: var(--green-color)
+  //   space_above: 24
+  class Ex5Heading extends HTMLElement {
+    setConfig(config) {
+      this._config = config || {};
+      this._text = null;
+    }
+
+    set hass(hass) {
+      this._hass = hass;
+      const c = this._config;
+      let text = c.heading || "";
+      if (text.includes("{battery}")) {
+        const s = hass.states[c.entity || "sensor.ex5_battery"];
+        const v = s && !isNaN(parseFloat(s.state)) ? Math.round(parseFloat(s.state)) : "–";
+        text = text.replace("{battery}", v);
+      }
+      if (text !== this._text) {
+        this._text = text;
+        this._build(text);
+      } else if (this._card) {
+        this._card.hass = hass;
+      }
+    }
+
+    getCardSize() { return 1; }
+    getGridOptions() { return { columns: "full", rows: "auto" }; }
+
+    async _build(text) {
+      if (!this.shadowRoot) this.attachShadow({ mode: "open" });
+      const c = this._config;
+      const conf = { type: "heading", heading: text };
+      ["icon", "heading_style", "badges", "tap_action"].forEach((k) => { if (c[k] !== undefined) conf[k] = c[k]; });
+      if (!this._card) {
+        const helpers = await window.loadCardHelpers();
+        this._card = helpers.createCardElement(conf);
+        const pad = Number(c.space_above) || 0;
+        this.shadowRoot.innerHTML = `<style>:host{display:block;padding-top:${pad}px}</style>`;
+        this.shadowRoot.appendChild(this._card);
+        if (c.icon_color) keepStyle(this._card, `ha-icon, ha-state-icon { color: ${c.icon_color} !important; }`);
+      } else {
+        this._card.setConfig(conf);
+      }
+      this._card.hass = this._hass;
     }
   }
 
@@ -348,6 +402,7 @@
   define("ex5-car-card", Ex5CarCard);
   define("ex5-map-card", Ex5MapCard);
   define("ex5-timeline-card", Ex5TimelineCard);
+  define("ex5-heading", Ex5Heading);
   const t = T[(navigator.language || "en").toLowerCase().startsWith("pt") ? "pt" : "en"];
   window.customCards = window.customCards || [];
   window.customCards.push(

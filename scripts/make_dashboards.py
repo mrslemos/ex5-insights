@@ -114,15 +114,16 @@ def dash(pt):
         "icon": "mdi:map-marker-distance", "max_columns": 2, "header": header(T("Range", "Autonomia")),
         "sections": [
             {"type": "grid", "cards": [
-                {"type": "heading", "heading": T("Full charge (100%)", "Carga cheia (100%)"), "icon": "mdi:battery"},
+                {"type": "custom:ex5-heading", "heading": T("Full charge (100%)", "Carga Cheia (100%)"),
+                 "icon": "mdi:battery", "icon_color": "var(--green-color)"},
                 tile("sensor.ex5_real_range_highway", T("Highway", "Estrada"), "mdi:highway", "blue"),
                 tile("sensor.ex5_real_range_city", T("City", "Cidade"), "mdi:city-variant-outline", "green"),
                 tile("sensor.ex5_real_range", T("Overall", "Geral"), "mdi:map-marker-distance", "purple"),
                 tile("sensor.ex5_car_range_full", T("By the car", "Pelo carro"), "mdi:car-info", "grey"),
             ]},
             {"type": "grid", "cards": [
-                {"type": "heading", "heading": T("Current charge", "Carga atual"), "icon": "mdi:battery-50",
-                 "badges": [{"type": "entity", "entity": "sensor.ex5_battery", "show_icon": False}]},
+                {"type": "custom:ex5-heading", "heading": T("Current charge ({battery}%)", "Carga Atual ({battery}%)"),
+                 "icon": "mdi:battery-50"},
                 tile("sensor.ex5_range_now_highway", T("Highway", "Estrada"), "mdi:highway", "blue"),
                 tile("sensor.ex5_range_now_city", T("City", "Cidade"), "mdi:city-variant-outline", "green"),
                 tile("sensor.ex5_range_now", T("Overall", "Geral"), "mdi:map-marker-distance", "purple"),
@@ -131,7 +132,7 @@ def dash(pt):
             {"type": "grid", "cards": [
                 {"type": "heading", "heading": T("Battery", "Bateria"), "icon": "mdi:car-battery"},
                 tile("sensor.ex5_battery_health", T("Health", "Saúde"), "mdi:battery-heart", "red"),
-                tile("sensor.ex5_battery_capacity", T("Max. capacity", "Capacidade máx."), "mdi:battery-high", "amber"),
+                tile("sensor.ex5_battery_capacity", T("Max. capacity", "Capacidade Máx."), "mdi:battery-high", "amber"),
             ]},
             {"type": "grid", "cards": [
                 {"type": "heading", "heading": T("Over time", "Ao longo do tempo"), "icon": "mdi:chart-line"},
@@ -174,7 +175,7 @@ def dash(pt):
         "title": "EX5",
         "views": [car_view, {
             "type": "sections", "title": T("Usage", "Uso"), "path": T("usage", "uso"),
-            "icon": "mdi:chart-box-outline", "max_columns": 2,
+            "icon": "mdi:chart-box-outline", "max_columns": 2, "header": header(T("Car usage", "Uso do carro")),
             "sections": [
                 {"type": "grid", "cards": [
                     {"type": "heading", "heading": T("Month", "Mês"), "icon": "mdi:calendar-month"},
@@ -194,20 +195,11 @@ def dash(pt):
                     waiting("number.ex5_pending_station_kwh", T("Charge waiting for the station's kWh",
                                                                 "Recarga esperando os kWh do eletroposto"),
                             T("Station kWh", "kWh do eletroposto")),
-                    {"type": "heading", "heading": T("Charges of the month", "Recargas do mês"),
-                     "icon": "mdi:ev-station"},
+                    {"type": "custom:ex5-heading", "heading": T("Charges of the month", "Recargas do mês"),
+                     "icon": "mdi:ev-station", "space_above": 24},
                     {"type": "markdown", "grid_options": {"columns": "full"}, "content": table},
                 ]},
                 {"type": "grid", "cards": [
-                    {"type": "heading", "heading": T("Car", "Carro"), "icon": "mdi:car-electric"},
-                    {"type": "picture-entity", "entity": "image.ex5_car", "show_name": False, "show_state": False,
-                     "grid_options": {"columns": "full"}},
-                    {"type": "tile", "entity": "binary_sensor.ex5_charging", "name": T("Charging", "Carregando"),
-                     "grid_options": {"columns": 6}},
-                    {"type": "tile", "entity": "sensor.ex5_session_energy", "name": T("This charge", "Esta recarga"),
-                     "grid_options": {"columns": 6}},
-                    {"type": "tile", "entity": "sensor.ex5_last_charge", "name": T("Last charge", "Última recarga"),
-                     "grid_options": {"columns": "full"}},
                     {"type": "heading", "heading": T("By month", "Por mês"), "icon": "mdi:chart-bar"},
                     {"type": "statistics-graph", "title": "Km", "chart_type": "bar", "period": "month",
                      "days_to_show": 365, "stat_types": ["change"], "hide_legend": True,
@@ -217,10 +209,6 @@ def dash(pt):
                      "period": "month", "days_to_show": 365, "stat_types": ["change"],
                      "entities": [{"entity": "ex5_insights:energy_ac", "name": "AC"},
                                   {"entity": "ex5_insights:energy_dc", "name": "DC"}],
-                     "grid_options": {"columns": "full"}},
-                    {"type": "statistics-graph", "title": T("Cost", "Custo"), "chart_type": "bar",
-                     "period": "month", "days_to_show": 365, "stat_types": ["change"], "hide_legend": True,
-                     "entities": [{"entity": "ex5_insights:cost", "name": T("Cost", "Custo")}],
                      "grid_options": {"columns": "full"}},
                 ]},
             ],
