@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#232A3A"/><stop offset="1" stop-color="#3E4A62"/></linearGradient>
+<linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3E4A62"/><stop offset="1" stop-color="#7C8291"/></linearGradient>
+<clipPath id="cx"><rect x="98" y="160" width="60" height="44"/></clipPath>
+</defs>
+<rect width="1280" height="640" fill="url(#bg)"/>
+<g transform="translate(110,160) scale(1.25)">
+<rect x="0" y="0" width="256" height="256" rx="60" fill="url(#g1)"/>
+<g transform="translate(18,-46) scale(0.825)">
+<path d="M36 170 V146 Q38 132 54 128 L84 122 L110 98 Q117 92 128 92 H178 Q188 92 195 99 L216 122 Q228 127 230 140 V170 Z" fill="#fff"/>
+<path d="M96 124 L116 104 Q120 101 126 101 H148 V124 Z M156 101 H176 Q182 101 186 106 L202 124 H156 Z" fill="#455066"/>
+<circle cx="82" cy="172" r="22" fill="#fff" stroke="#4E586C" stroke-width="10"/>
+<circle cx="186" cy="172" r="22" fill="#fff" stroke="#4E586C" stroke-width="10"/>
+</g>
+<path d="M36 134 H220" stroke="#5DCAA5" stroke-width="8" stroke-linecap="round"/>
+<path d="M36 134 H150" stroke="#9FE1CB" stroke-width="8" stroke-linecap="round"/>
+<g fill="#fff">
+<rect x="36" y="160" width="11" height="44"/><rect x="36" y="160" width="56" height="10"/><rect x="36" y="177" width="50" height="10"/><rect x="36" y="194" width="56" height="10"/>
+<rect x="164" y="160" width="56" height="10"/><rect x="164" y="160" width="11" height="27"/>
+</g>
+<g clip-path="url(#cx)" stroke="#fff" stroke-width="12"><path d="M100 160 L156 204 M156 160 L100 204"/></g>
+<path d="M164 182 H205 Q215 182 215 190.5 Q215 199 205 199 H164" fill="none" stroke="#fff" stroke-width="10" stroke-linejoin="round"/>
+</g>
+<text x="500" y="285" font-family="Arial" font-weight="700" font-size="88" fill="#FFFFFF">EX5 Insights</text>
+<rect x="502" y="318" width="120" height="8" rx="4" fill="#9FE1CB"/><rect x="622" y="318" width="80" height="8" rx="4" fill="#5DCAA5"/>
+<text x="500" y="390" font-family="Arial" font-size="34" fill="#D5DBE5">Recargas, custos, viagens, autonomia real</text>
+<text x="500" y="436" font-family="Arial" font-size="34" fill="#D5DBE5">e saúde da bateria do Geely EX5</text>
+<text x="500" y="482" font-family="Arial" font-size="34" fill="#D5DBE5">no Home Assistant</text>
+<text x="500" y="548" font-family="Arial" font-size="24" fill="#9AA4B5">Integração HACS · não oficial · github.com/mrslemos/ex5-insights</text>
+</svg>
