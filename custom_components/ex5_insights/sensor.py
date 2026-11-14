@@ -248,7 +248,7 @@ class Battery(Mirror):
 
 
 class BatteryCapacity(Ex5Entity, SensorEntity):
-    """Real capacity measured in the charges (average of the latest three, times the calibration factor)."""
+    """Real capacity measured in the charges (average of the latest three AC ones, times the calibration factor)."""
 
     _attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
     _attr_device_class = SensorDeviceClass.ENERGY_STORAGE
@@ -271,6 +271,7 @@ class BatteryCapacity(Ex5Entity, SensorEntity):
     def extra_state_attributes(self):
         ms = self.tracker.data.get("capacity_measurements", [])
         return {"published_kwh": self.tracker.nominal_capacity, "measurements": len(ms),
+                "measurements_ac": sum(1 for m in ms if m.get("kind", "AC") == "AC"),
                 "latest": ms[-1] if ms else None}
 
 

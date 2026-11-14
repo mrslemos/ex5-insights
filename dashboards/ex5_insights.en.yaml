@@ -299,7 +299,7 @@ views:
             text_only: true
             grid_options:
               columns: full
-            content: "<small><b>How it is calculated.</b> Real range comes from your history: the km of the latest trips until 100% of battery has been used, including what the car uses while parked (climate, losses). <b>Highway</b> trips are 10 km or longer with more than half of the way at 70 km/h or more; the others are <b>city</b>. <b>Current charge</b> applies the real range to the battery now. <b>By the car</b> is the EX5's own estimate. <b>Max. capacity</b> is measured in charges of 20 points or more, and <b>health</b> compares it with the 60.22 kWh from the factory. Until the history adds up to 100% of battery used, the value is a preview.</small>"
+            content: "<small><b>How it is calculated.</b> Real range comes from your history: the km of the latest trips until 100% of battery has been used, including what the car uses while parked (climate, losses). <b>Highway</b> trips are 10 km or longer with more than half of the way at 70 km/h or more; the others are <b>city</b>. <b>Current charge</b> applies the real range to the battery now. <b>By the car</b> is the EX5's own estimate. <b>Max. capacity</b> is measured in AC charges of 20 points or more, and <b>health</b> compares it with the 60.22 kWh from the factory. Until the history adds up to 100% of battery used, the value is a preview.</small>"
   - type: sections
     title: Timeline
     path: trips

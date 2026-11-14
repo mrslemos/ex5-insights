@@ -158,9 +158,11 @@ are 10 km or longer with more than half of the distance at 70 km/h or more, by t
 **Battery capacity.** In each charge, the energy that went into the pack (Geely Connect's `pack_power`) between the
 first and the last time the percentage went up, divided by the points gained. Only charges of 20 points or more, up to
 95 % (above that the battery balances and the percentage moves slowly), and not when Home Assistant restarted during
-the charge. The capacity is the average of the latest three measurements, times a calibration factor (1 by default; if
+the charge. The capacity is the average of the latest three AC measurements, times a calibration factor (1 by default; if
 an OBD2 app such as ABRP shows the battery health, factor = health × 60.22 / 100 ÷ measured capacity). Health compares
-it with the published 60.22 kWh. Until the first measurement, kWh use the published capacity.
+it with the published 60.22 kWh. Until the first AC measurement, kWh use the published capacity. DC charges are measured
+and kept, but stay out of the average: they come out high (60.0 and 61.9 kWh against ~58 kWh in AC on the author's
+car, above the published 60.22), because the DC power reaches Home Assistant from the cloud sparsely and changes fast.
 
 ## Privacy
 

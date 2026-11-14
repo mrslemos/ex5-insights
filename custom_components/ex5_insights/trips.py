@@ -259,8 +259,12 @@ class CapacityMeter:
 
 
 def measured_capacity(measurements: list[dict], factor: float = 1.0) -> float | None:
-    """Average of the latest measurements times the calibration factor (None if there are none)."""
-    caps = [float(m["capacity"]) for m in measurements if m.get("capacity")]
+    """Average of the latest AC measurements times the calibration factor (None if there are none).
+
+    DC charges stay in the list but out of the average: they measure high (60.0 and 61.9 kWh against ~58 in AC on
+    the author's car, above the published 60.22), because the DC pack power comes from the cloud sparsely and changes
+    fast. Measurements without a kind (older data) count."""
+    caps = [float(m["capacity"]) for m in measurements if m.get("capacity") and m.get("kind", "AC") == "AC"]
     if not caps:
         return None
     last = caps[-CAPACITY_AVERAGE_OF:]

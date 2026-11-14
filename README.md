@@ -161,9 +161,11 @@ média acima de 60 km/h). As demais são cidade, e dividem o gasto parado na pro
 **Capacidade da bateria.** Em cada recarga, a energia que entrou no pack (`pack_power` da Geely Connect) entre a
 primeira e a última vez que a porcentagem subiu, dividida pelos pontos ganhos. Só recargas de 20 pontos ou mais, até
 95% (acima disso a bateria se equilibra e a porcentagem anda devagar), e não quando o Home Assistant reiniciou durante
-a recarga. A capacidade é a média das 3 últimas medições, vezes um fator de calibração (1 por padrão; se um app de
+a recarga. A capacidade é a média das 3 últimas medições em recargas AC, vezes um fator de calibração (1 por padrão; se um app de
 OBD2, como o ABRP, mostrar a saúde da bateria, fator = saúde × 60,22 / 100 ÷ capacidade medida). A saúde compara com
-os 60,22 kWh publicados. Até a primeira medição, os kWh usam a capacidade publicada.
+os 60,22 kWh publicados. Até a primeira medição AC, os kWh usam a capacidade publicada. As recargas DC são medidas e
+guardadas, mas ficam fora da média: dão alto (60,0 e 61,9 kWh contra ~58 kWh nas AC no carro do autor, acima dos 60,22
+publicados), porque a potência DC chega da nuvem ao Home Assistant espaçada e muda rápido.
 
 ## Privacidade
 

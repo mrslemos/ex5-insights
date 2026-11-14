@@ -151,6 +151,12 @@ class Capacity(unittest.TestCase):
         self.assertEqual(trips.measured_capacity(ms, 1.0156), round(57.75 * 1.0156, 2))
         self.assertIsNone(trips.measured_capacity([]))
 
+    def test_dc_charges_stay_out_of_the_average(self):
+        ms = [{"capacity": 57.4, "kind": "AC"}, {"capacity": 58.1, "kind": "AC"}, {"capacity": 60.0, "kind": "DC"},
+              {"capacity": 57.75, "kind": "AC"}, {"capacity": 61.87, "kind": "DC"}]
+        self.assertEqual(trips.measured_capacity(ms), 57.75)
+        self.assertIsNone(trips.measured_capacity([{"capacity": 61.87, "kind": "DC"}]))
+
 
 class PlaceNames(unittest.TestCase):
     def test_brazil_and_federal_district(self):
