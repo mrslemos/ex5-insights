@@ -85,6 +85,20 @@ class Session(unittest.TestCase):
         r = s.result(1800, 55, CAP)
         self.assertAlmostEqual(r["kwh"], 3.01, places=2)
 
+    def test_position_follows_charge(self):
+        # Geely Connect back from "unavailable" already charging: first report with the old position (away from
+        # the place), the right one a minute later. The charge must end up at the place, not "ask".
+        home = core.Place("Home", -15.80, -47.90, 300)
+        s = core.ChargeSession(start=ts("2026-11-16 17:29:51"), battery_start=33, latitude=-15.89, longitude=-47.92)
+        self.assertIsNone(core.find_place([home], s.latitude, s.longitude))
+        self.assertTrue(s.set_position(-15.8001, -47.9001))
+        self.assertEqual(core.find_place([home], s.latitude, s.longitude).name, "Home")
+        self.assertFalse(s.set_position(-15.8001, -47.9001))  # same point
+        for bad in ((None, None), ("unknown", 1), (0, 0), (91, 0)):
+            self.assertFalse(s.set_position(*bad))
+        self.assertEqual((s.latitude, s.longitude), (-15.8001, -47.9001))
+        self.assertTrue(core.ChargeSession(start=0, battery_start=0).set_position(-15.8, -47.9))  # none at start
+
     def test_roundtrip(self):
         s = core.ChargeSession(start=1, battery_start=2, kind="DC", energy=3.5)
         self.assertEqual(core.ChargeSession.from_dict(s.to_dict() | {"junk": 1}), s)

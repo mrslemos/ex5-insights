@@ -142,6 +142,24 @@ class ChargeSession:
     def add_battery(self, now: float, battery: float) -> None:
         self.battery, self.battery_time = battery, now
 
+    def set_position(self, lat: float | None, lon: float | None) -> bool:
+        """Newer position while charging (the car is plugged in, so it is not moving). Returns whether it changed.
+
+        When Geely Connect comes back from "unavailable" with the car already charging, its first report can carry
+        the position from before the drive; the real one arrives a minute or so later. Without this, the charge kept
+        the old position, missed the charging place and asked for the price as if it were a public station.
+        """
+        try:
+            la, lo = float(lat), float(lon)
+        except (TypeError, ValueError):
+            return False
+        if (la == 0 and lo == 0) or not (-90 <= la <= 90 and -180 <= lo <= 180):
+            return False
+        if (la, lo) == (self.latitude, self.longitude):
+            return False
+        self.latitude, self.longitude = la, lo
+        return True
+
     def fill_gap(self, since: float, now: float, power_before: float, power_now: float,
                  battery_before: float | None, battery_now: float | None, capacity: float) -> float:
         """Energy for a stretch without readings (HA restarting, car silent). Returns what was added.

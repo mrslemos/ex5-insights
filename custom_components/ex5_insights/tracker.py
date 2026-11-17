@@ -237,6 +237,7 @@ class Ex5Tracker:
             return
         if eid == self.entities.get(KEY_TRACKER):
             self._add_point(now)
+            self._refresh_charge_position()
             return
         if eid in (self.entities.get(KEY_PARK), self.entities.get(KEY_ENGINE)):
             return  # read when the trip end is checked
@@ -278,6 +279,7 @@ class Ex5Tracker:
                 self.meter.advance(now)
             self._save()
         self._mark_odometer()
+        self._refresh_charge_position()
         self._evaluate(now)
         self._check_trip_end(now)
         stop = self.data["stop"]
@@ -330,6 +332,15 @@ class Ex5Tracker:
         _LOGGER.debug("Charge started: %s", s)
         self._save(now=True)
         self._notify_entities()
+
+    def _refresh_charge_position(self) -> None:
+        """Keep the charge's position current while it is still charging (see ChargeSession.set_position). Not once
+        the power is off: at a public station the car may be unplugged and driven away before the charge closes."""
+        if self.session is None or not self._charging_now():
+            return
+        if self.session.set_position(*self._position()):
+            _LOGGER.debug("Charge position updated: %s, %s", self.session.latitude, self.session.longitude)
+            self._save()
 
     def _resume_after_restart(self) -> None:
         """HA was off during a charge: fill the stretch without readings, then carry on."""
