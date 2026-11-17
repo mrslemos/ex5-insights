@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 DOMAIN = "ex5_insights"
-VERSION = "0.2.3"  # also in manifest.json; changes the cards' script address so browsers fetch the new one
+VERSION = "0.2.4"  # also in manifest.json; changes the cards' script address so browsers fetch the new one
 SOURCE_DOMAIN = "geely_connect"  # the Geely Connect integration (YossiKon/geely-connect)
 
 CONF_DEVICE = "device_id"
